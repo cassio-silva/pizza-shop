@@ -1,4 +1,3 @@
-import { Table } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 
 import { OrderTableFilter } from "@/components/orders/order-table-filter";
@@ -9,9 +8,17 @@ import {
   TableRow,
   TableHead,
   TableBody,
+  Table,
 } from "@/components/ui/table";
+import { useQuery } from "@tanstack/react-query";
+import { getOrders } from "@/api/get-orders";
 
 export function Orders() {
+  const { data: result } = useQuery({
+    queryFn: getOrders,
+    queryKey: ["orders"],
+  });
+
   return (
     <>
       <Helmet title="Pedidos" />
@@ -35,9 +42,10 @@ export function Orders() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {Array.from({ length: 4 }).map((_, index) => (
-                  <OrderTableRow key={index} />
-                ))}
+                {result &&
+                  result.orders.map((order) => (
+                    <OrderTableRow key={order.orderId} order={order} />
+                  ))}
               </TableBody>
             </Table>
           </div>
