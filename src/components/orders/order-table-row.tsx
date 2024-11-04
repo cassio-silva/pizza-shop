@@ -6,6 +6,7 @@ import { OrderDetails } from "./order-details";
 import { OrderStatus } from "@/components/order-status";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useState } from "react";
 
 interface OrderTableRowProps {
   order: {
@@ -18,17 +19,23 @@ interface OrderTableRowProps {
 }
 
 export function OrderTableRow({ order }: OrderTableRowProps) {
+  const [isDetailsOpened, setIsDetailsOpened] = useState(false);
+
   return (
     <TableRow>
       <TableCell>
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant={"outline"} size={"xs"}>
+            <Button
+              onClick={() => setIsDetailsOpened(!isDetailsOpened)}
+              variant={"outline"}
+              size={"xs"}
+            >
               <Search className="h-3 w-3" />
               <span className="sr-only">Detalhes do pedido</span>
             </Button>
           </DialogTrigger>
-          <OrderDetails />
+          <OrderDetails orderId={order.orderId} isOpen={isDetailsOpened} />
         </Dialog>
       </TableCell>
       <TableCell className="font-mono font-medium">{order.orderId}</TableCell>
@@ -43,7 +50,7 @@ export function OrderTableRow({ order }: OrderTableRowProps) {
       </TableCell>
       <TableCell className="font-medium">{order.customerName}</TableCell>
       <TableCell className="font-medium">
-        {order.total.toLocaleString("pt-BR", {
+        {(order.total / 100).toLocaleString("pt-BR", {
           style: "currency",
           currency: "BRL",
         })}
