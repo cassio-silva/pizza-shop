@@ -1,24 +1,25 @@
-import { OrderStatus } from "@/components/order-status";
 import { render } from "@testing-library/react";
+import { OrderStatus, orderStatusMap } from "@/components/order-status";
 
 describe("Order Status", () => {
-  it("should display the right text based on order status", () => {
-    let wrapper = render(<OrderStatus status="pending" />);
+  it.each(
+    Object.entries(orderStatusMap).map(([orderKey, orderInfo]) => [
+      orderKey,
+      orderInfo.value,
+      orderInfo.color,
+    ]),
+  )(
+    'should display the right text "%s" and have class "%s" based on order status',
+    (orderKey, expectedText, expectedClass) => {
+      const { getByText, getByTestId } = render(
+        <OrderStatus status={orderKey as OrderStatus} />,
+      );
 
-    // wrapper.debug();
+      const statusText = getByText(expectedText);
+      const badgeElement = getByTestId(`badge`);
 
-    let statusText = wrapper.getByText("Pendente");
-    let badgeElement = wrapper.getByTestId("badge");
-
-    expect(statusText).toBeInTheDocument();
-    expect(badgeElement).toHaveClass("bg-slate-500");
-
-    wrapper = render(<OrderStatus status="canceled" />);
-
-    statusText = wrapper.getByText("Cancelado");
-    badgeElement = wrapper.getByTestId("badge");
-
-    expect(statusText).toBeInTheDocument();
-    expect(badgeElement).toHaveClass("bg-rose-500");
-  });
+      expect(statusText).toBeInTheDocument();
+      expect(badgeElement).toHaveClass(expectedClass);
+    },
+  );
 });
