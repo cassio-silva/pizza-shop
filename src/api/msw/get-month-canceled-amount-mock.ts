@@ -5,9 +5,9 @@ export const getMonthCanceledOrdersAmountMock = http.get<
   never,
   never,
   GetMonthCanceledOrdersAmountResponse
->("/metrics/month-canceled-orders-amount", () => {
+>("/metrics/month-canceled-orders-amount", async () => {
   return HttpResponse.json({
     amount: 12,
-    diffFromLastMonth: -5,
+    diffFromLastMonth: 5,
   });
 });
