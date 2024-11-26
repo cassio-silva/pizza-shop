@@ -7,7 +7,7 @@ import { DollarSign } from "lucide-react";
 export function MonthlyCanceledAmountCard() {
   const { data: monthCanceledOrdersAmount } = useQuery({
     queryFn: getMonthCanceledOrdersAmount,
-    queryKey: ["metrics", "day-orders-amount"],
+    queryKey: ["metrics", "month-canceled-orders-amount"],
   });
 
   return (
